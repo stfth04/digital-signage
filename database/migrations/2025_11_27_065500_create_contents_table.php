@@ -10,9 +10,9 @@ public function up()
 {
 Schema::create('contents', function (Blueprint $table) {
     $table->id(); 
-    $table->string('nama_file');      // contoh: "Statistik Indonesia 2025"
-    $table->string('file');           // contoh: "statistik2025.jpg"
-    $table->string('tipe_file');      // contoh: "image/jpg" atau "video/mp4"
+    $table->string('nama_file');      
+    $table->string('file');           
+    $table->string('jenis');          
     $table->timestamps();
 });
 

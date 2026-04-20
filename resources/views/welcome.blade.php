@@ -7,7 +7,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    @vite('resources/css/player.css')
+    <style>
+ body {
+    margin: 0;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* FRAME UTAMA (portrait) */
+#player {
+    aspect-ratio: 9 / 16;
+    height: 100vh;
+    max-width: calc(100vh * 9 / 16);
+    background: black;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+video, img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+    </style>
 </head>
 <body>
 

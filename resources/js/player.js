@@ -28,6 +28,11 @@ function playNext() {
         return;
     }
 
+    // 🔥 ATUR ORIENTASI PLAYER
+    const orientasi = (item.orientasi || 'Landscape').toLowerCase();
+    console.log(`Memainkan konten: ${item.nama_file} [Orientasi: ${orientasi}]`);
+    document.body.className = 'mode-' + orientasi;
+
     const file = `/storage/${item.file}`;
     const clean = file.split("?")[0];
     const ext = clean.split(".").pop().toLowerCase();
@@ -36,7 +41,7 @@ function playNext() {
     if (VIDEO_EXT.includes(ext)) {
         const video = document.createElement("video");
         video.src = file;
-        video.muted = true;
+        video.muted = false;
         video.playsInline = true;
         video.preload = "auto";
 
@@ -136,3 +141,25 @@ document.addEventListener(
     },
     { once: true }
 );
+
+
+const el = document.querySelector("video, img");
+
+function adjust() {
+    const w = el.videoWidth || el.naturalWidth;
+    const h = el.videoHeight || el.naturalHeight;
+
+    if (w > h) {
+        // LANDSCAPE → BESARKAN dikit
+        el.style.transform = "scale(1.4)";
+    } else {
+        // PORTRAIT normal
+        el.style.transform = "scale(1)";
+    }
+}
+
+if (el.tagName === "VIDEO") {
+    el.onloadedmetadata = adjust;
+} else {
+    el.onload = adjust;
+}

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('playlist_content', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('contents', function (Blueprint $table) {
+            $table->string('resolusi')->nullable()->after('jenis');
+            $table->string('orientasi')->nullable()->after('resolusi');
         });
     }
 
@@ -22,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('playlist_content');
+        Schema::table('contents', function (Blueprint $table) {
+            $table->dropColumn(['resolusi', 'orientasi']);
+        });
     }
 };

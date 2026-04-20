@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2025 at 09:20 AM
+-- Generation Time: Apr 07, 2026 at 06:55 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,7 +42,10 @@ CREATE TABLE `contents` (
 
 INSERT INTO `contents` (`id`, `file`, `nama_file`, `jenis`, `created_at`, `updated_at`) VALUES
 (49, 'uploads/Sensus Ekonomi 2025.mp4', 'Sensus Ekonomi 2025', 'Video', '2025-12-01 17:12:26', '2025-12-01 17:12:26'),
-(51, 'uploads/Kalsel angka bicara.webp', 'Kalsel angka bicara', 'Gambar', '2025-12-04 23:20:36', '2025-12-04 23:20:36');
+(52, 'uploads/Pajak BPS Provinsi Kalsel.mp4', 'Pajak BPS Provinsi Kalsel', 'Video', '2025-12-14 22:40:31', '2025-12-14 22:40:31'),
+(54, 'uploads/Kalsel angka bicara.webp', 'Kalsel angka bicara', 'Gambar', '2025-12-22 23:08:35', '2025-12-22 23:08:35'),
+(55, 'uploads/BPS Provinsi Kalsel.webp', 'BPS Provinsi Kalsel', 'Gambar', '2026-03-09 03:57:23', '2026-03-09 03:57:23'),
+(56, 'uploads/gacor.jpg', 'gacor', 'Gambar', '2026-04-07 07:22:54', '2026-04-07 07:22:54');
 
 -- --------------------------------------------------------
 
@@ -152,7 +155,8 @@ CREATE TABLE `playlists` (
 --
 
 INSERT INTO `playlists` (`id`, `nama_playlist`, `created_at`, `updated_at`) VALUES
-(3, 'Sensus Ekonomi 2025', '2025-11-30 22:54:08', '2025-12-09 00:14:11');
+(3, 'Sensus Ekonomi 2025', '2025-11-30 22:54:08', '2025-12-14 19:25:35'),
+(10, 'BPS Provinsi Kalsel', '2025-12-14 22:41:27', '2025-12-14 22:41:27');
 
 -- --------------------------------------------------------
 
@@ -175,7 +179,9 @@ CREATE TABLE `playlist_content` (
 --
 
 INSERT INTO `playlist_content` (`id`, `playlist_id`, `content_id`, `order`, `duration`, `created_at`, `updated_at`) VALUES
-(4, 3, 51, 1, 30, NULL, NULL);
+(6, 10, 52, 1, 0, '2025-12-14 22:42:29', '2025-12-14 22:42:29'),
+(7, 10, 49, 2, 0, '2025-12-22 23:04:37', '2025-12-22 23:04:37'),
+(8, 10, 54, 3, 5, '2025-12-22 23:08:43', '2025-12-22 23:08:43');
 
 -- --------------------------------------------------------
 
@@ -270,7 +276,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `contents`
 --
 ALTER TABLE `contents`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -300,13 +306,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `playlists`
 --
 ALTER TABLE `playlists`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `playlist_content`
 --
 ALTER TABLE `playlist_content`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`

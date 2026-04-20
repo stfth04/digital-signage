@@ -31,28 +31,45 @@
 
         /* ---------- Upload area ---------- */
         .upload-area {
-            border-radius: 15px;
-            background: #D9D9D9;
+            border-radius: 20px;
+            background: #ffffff;
+            border: 2px dashed #cbd5e0;
             text-align: center;
-            padding: 110px;
-            transition: background 0.3s;
+            padding: 60px 40px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: #336F97;
+            background: #f8fafc;
         }
 
         .icon-upload {
-            font-size: 60px;
-            color: #999;
+            margin-bottom: 20px;
         }
 
         /* ---------- Form controls ---------- */
         .form-control,
         .form-select {
-            border-radius: 20px;
-            background-color: #D9D9D9;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 12px 15px;
+            background-color: #ffffff;
+            font-size: 14px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #336F97;
+            box-shadow: 0 0 0 3px rgba(51, 111, 151, 0.1);
+            background-color: #ffffff;
         }
 
         .upload-section {
-            /* adjust to match previous look */
-            margin-left: -75px;
+            padding-right: 40px;
         }
 
         /* ---------- Buttons ---------- */
@@ -141,17 +158,18 @@
         }
 
         .btn-buat-playlist {
-            background: #2e6c96;
+            background: #206486;
             color: white;
             border: none;
             padding: 10px 30px;
             border-radius: 25px;
             font-size: 16px;
             cursor: pointer;
+            font-weight: 600;
         }
 
         .btn-buat-playlist:hover {
-            background: #245979;
+            background: #1a4f6a;
         }
 
         .playlist-card {
@@ -199,19 +217,24 @@
 
         .btn-play-all,
         .btn-add-content {
-            background: #d7d5d5;
+            background: #206486;
+            color: white;
             border: none;
             border-radius: 25px;
-            padding: 10px 5px;
+            padding: 10px 20px;
             cursor: pointer;
             font-size: 14px;
-            width: 200px;
-            padding-right: 70px;
+            width: auto;
+            min-width: 150px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
         .btn-play-all:hover,
         .btn-add-content:hover {
-            background: #c6c5c5;
+            background: #1a4f6a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .playlist-empty {
@@ -224,25 +247,98 @@
         /* ---------- Table ---------- */
         .table-container {
             background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
-        thead {
-            background-color: #f7941d !important;
-            color: white !important;
+        .table {
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            border: none;
         }
 
-        th,
-        td {
-            vertical-align: middle;
-            text-align: center;
+        .table thead th {
+            background-color: #f8f9fa !important;
+            color: #495057 !important;
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
         }
 
-        .table img {
+        .table tbody tr {
+            background-color: #ffffff;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+        }
+
+        .table tbody tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            background-color: #fcfcfc;
+        }
+
+        .table td {
+            border: none;
+            padding: 20px 15px;
+            background-color: transparent !important;
+        }
+
+        .table td:first-child {
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .table td:last-child {
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .content-thumbnail,
+        .content-video {
             width: 120px;
-            border-radius: 5px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #000;
+        }
+
+        .is-portrait {
+            width: 70px !important;
+            height: 110px !important;
+        }
+
+        /* ---------- Badges ---------- */
+        .badge-kind {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-video {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-image {
+            background-color: #f1f8e9;
+            color: #388e3c;
+        }
+
+        .badge-res {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+
+        .badge-orient {
+            background-color: #f3e5f5;
+            color: #7b1fa2;
         }
 
         /* small helpers */
@@ -412,6 +508,27 @@
             justify-content: center;
             border-radius: 12px;
             overflow: hidden;
+            position: relative;
+        }
+
+        .preview-player.mode-landscape-preview {
+            aspect-ratio: 16 / 9;
+            height: auto;
+            max-height: 450px;
+        }
+
+        .preview-player.mode-portrait-preview {
+            aspect-ratio: 9 / 16;
+            width: auto;
+            height: 450px;
+            margin: 0 auto;
+        }
+
+        .preview-player video,
+        .preview-player img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .preview-placeholder {
@@ -1021,7 +1138,6 @@
 </head>
 
 <body>
-
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg px-4 py-3" style="background-color: #336F97;">
         <div class="container-fluid">
@@ -1100,54 +1216,63 @@
 
                 <div class="row align-items-start">
                     <!-- Upload column -->
-                    <div class="col-md-8 upload-section">
-                        <h5><strong>Upload File</strong></h5>
+                    <div class="col-md-7 upload-section">
+                        <h5 class="mb-4"><strong>Upload File</strong></h5>
 
-                        <div class="upload-area" id="uploadArea">
-                            <div class="icon-upload mb-2" id="iconArea">
-                                <img src="{{ asset('icon.png') }}" alt="Upload Icon" width="60">
+                        <div class="upload-area d-flex flex-column align-items-center justify-content-center"
+                            id="uploadArea">
+                            <div class="icon-upload" id="iconArea">
+                                <img src="{{ asset('icon.png') }}" alt="Upload Icon" width="80" style="opacity: 0.6;">
                             </div>
 
-                            <p id="uploadText" style="color: #9A9A9A;">Klik atau seret file ke area ini</p>
+                            <div id="uploadTextContainer">
+                                <p id="uploadText" class="mb-1" font-weight="600">Klik atau seret file ke area ini</p>
+                                <p class="text-muted small">Mendukung format Gambar dan Video (Maks. 20MB)</p>
+                            </div>
 
                             <img id="previewImage" src="" alt=""
-                                style="display:none; max-width: 200px; margin-top:10px; margin-left:165px; border-radius:8px;">
+                                style="display:none; max-width: 100%; max-height: 300px; object-fit: contain; border-radius:12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
                             <video id="previewVideo" controls
-                                style="display:none; max-width:200px; margin-top:10px; margin-left:165px; border-radius:8px;"></video>
+                                style="display:none; max-width: 100%; max-height: 300px; border-radius:12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);"></video>
 
-                            <!-- NOTE: name="file" supaya ContentController menerima -->
                             <input type="file" name="file" id="fileInput" hidden accept="image/*,video/*">
                         </div>
                     </div>
 
                     <!-- Properti column -->
-                    <div class="col-md-4">
-                        <h6><strong>Properti</strong></h6>
+                    <div class="col-md-5 ps-md-4">
+                        <div class="card border-0 shadow-sm rounded-4 p-4">
+                            <h6 class="mb-4 text-primary"><strong>Properti Konten</strong></h6>
 
-                        <div class="mb-3">
-                            <label for="nama_file" class="form-label">Nama File</label>
-                            <input type="text" id="nama_file" name="nama_file" class="form-control" required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="nama_file" class="form-label text-secondary small fw-bold">NAMA FILE</label>
+                                <input type="text" id="nama_file" name="nama_file" class="form-control"
+                                    placeholder="Masukkan judul konten" required>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="resolusi" class="form-label">Resolusi</label>
-                            <select id="resolusi" name="resolusi" class="form-select">
-                                <option>1920x1080</option>
-                                <option>1280x720</option>
-                                <option>1024x768</option>
-                            </select>
-                        </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="resolusi"
+                                        class="form-label text-secondary small fw-bold">RESOLUSI</label>
+                                    <input type="text" id="resolusi" name="resolusi" class="form-control"
+                                        placeholder="Otomatis terdeteksi" readonly>
+                                </div>
 
-                        <div class="mb-3">
-                            <label for="orientasi" class="form-label">Orientasi</label>
-                            <select id="orientasi" name="orientasi" class="form-select">
-                                <option>Landscape</option>
-                                <option>Portrait</option>
-                            </select>
-                        </div>
+                                <div class="col-md-6 mb-4">
+                                    <label for="orientasi"
+                                        class="form-label text-secondary small fw-bold">ORIENTASI</label>
+                                    <select id="orientasi" name="orientasi" class="form-select">
+                                        <option>Landscape</option>
+                                        <option>Portrait</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div class="btn-area mt-4 d-flex justify-content-end">
-                            <button type="submit" class="btn-simpan">Simpan</button>
+                            <div class="btn-area">
+                                <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm">
+                                    Simpan Konten
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1212,43 +1337,68 @@
                             <th>No/ID</th>
                             <th>Konten</th>
                             <th>Jenis Konten</th>
+                            <th>Resolusi</th>
+                            <th>Orientasi</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($konten as $item)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>
-                                    @php
-                                        $ext = strtolower(pathinfo($item->file ?? '', PATHINFO_EXTENSION));
-                                    @endphp
+                                <td class="fw-bold text-secondary">#{{ $loop->iteration }}</td>
+                                <td class="text-start">
+                                    <div class="d-flex align-items-center gap-3">
+                                        @php
+                                            $ext = strtolower(pathinfo($item->file ?? '', PATHINFO_EXTENSION));
+                                        @endphp
 
-                                    @if (in_array($ext, ['mp4', 'mov', 'avi', 'mkv', 'webm']))
-                                        <video src="{{ asset('storage/' . $item->file) }}"
-                                            style="width:200px; height:auto;" controls></video>
-                                    @else
-                                        <img src="{{ asset('storage/' . $item->file) }}" style="max-width:120px;">
-                                    @endif
+                                        @if (in_array($ext, ['mp4', 'mov', 'avi', 'mkv', 'webm']))
+                                            <video src="{{ asset('storage/' . $item->file) }}"
+                                                class="content-video {{ strtolower($item->orientasi) == 'portrait' ? 'is-portrait' : '' }}"></video>
+                                        @else
+                                            <img src="{{ asset('storage/' . $item->file) }}"
+                                                class="content-thumbnail {{ strtolower($item->orientasi) == 'portrait' ? 'is-portrait' : '' }}">
+                                        @endif
 
-                                    <br>
-                                    <small><strong>{{ $item->nama_file }}</strong></small>
+                                        <div>
+                                            <div class="fw-bold text-dark">{{ $item->nama_file }}</div>
+                                            <small class="text-muted">{{ basename($item->file) }}</small>
+                                        </div>
+                                    </div>
                                 </td>
-                                <td>{{ $item->jenis }}</td>
                                 <td>
-                                    <button class="btn-aksi"
-                                        onclick="window.selectedKontenId={{ $item->id }}; openPopupPlaylist();">+</button>
+                                    <span class="badge-kind {{ $item->jenis == 'Video' ? 'badge-video' : 'badge-image' }}">
+                                        {{ $item->jenis }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge-kind badge-res">
+                                        {{ $item->resolusi ?? 'N/A' }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge-kind badge-orient">
+                                        {{ $item->orientasi ?? 'N/A' }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <button class="btn btn-sm btn-outline-success rounded-pill px-3"
+                                            onclick="playSingleItem('{{ $item->file }}', '{{ $item->orientasi }}')">
+                                            Putar
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                                            onclick="window.selectedKontenId={{ $item->id }}; openPopupPlaylist();">
+                                            + Playlist
+                                        </button>
 
-                                    {{-- Hapus Konten --}}
-                                    <form action="{{ route('contents.destroy', $item->id) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn-aksi text-danger"
-                                            onclick="return confirm('Hapus konten ini?')">Hapus</button>
-                                    </form>
-
-                                    <button class="btn-aksi text-secondary">Edit</button>
+                                        <form action="{{ route('contents.destroy', $item->id) }}" method="POST"
+                                            style="display:inline;" onsubmit="return confirm('Hapus konten ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger rounded-pill px-3">Hapus</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -1348,8 +1498,8 @@
                 event.target.classList.add('active-tab');
             }
 
-            // 🔥 KHUSUS PREVIEW
-            if (tabId === 'preview' && typeof loadActivePreview === 'function') {
+            // 🔥 KHUSUS PREVIEW (Hanya reload jika tidak sedang memutar item tunggal)
+            if (tabId === 'preview' && typeof loadActivePreview === 'function' && !window.skipAutoReload) {
                 loadActivePreview();
             }
         }
@@ -1373,17 +1523,17 @@
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             fetch('/playlist-content-add', {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "X-CSRF-TOKEN": token
-                    },
-                    body: JSON.stringify({
-                        konten_id: kontenId,
-                        playlist_id: playlistId
-                    })
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": token
+                },
+                body: JSON.stringify({
+                    konten_id: kontenId,
+                    playlist_id: playlistId
                 })
+            })
                 .then(res => {
                     if (!res.ok) throw new Error('Server error');
                     return res.json();
@@ -1445,16 +1595,16 @@
             if (nama === "" || !activePlaylistId) return;
 
             fetch("{{ route('playlist.updateName') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({
-                        id: activePlaylistId,
-                        nama_playlist: nama
-                    })
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    id: activePlaylistId,
+                    nama_playlist: nama
                 })
+            })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
@@ -1492,12 +1642,12 @@
             if (!deleteId) return;
 
             fetch(`/playlist/${deleteId}`, {
-                    method: "DELETE",
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                        "Accept": "application/json"
-                    }
-                })
+                method: "DELETE",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Accept": "application/json"
+                }
+            })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
@@ -1517,7 +1667,7 @@
 
         document
             .querySelector('#playlist')
-            .addEventListener('click', function(e) {
+            .addEventListener('click', function (e) {
 
                 const card = e.target.closest('.playlist-card');
                 if (!card) return;
@@ -1531,9 +1681,6 @@
                 document.getElementById('playlistDetail').classList.remove('d-none');
             });
 
-
-
-
         // escape HTML helper
         function escapeHtml(unsafe) {
             return String(unsafe)
@@ -1545,7 +1692,7 @@
         }
 
         // popup add playlist: sync hidden input before submission
-        document.querySelector('#formPlaylist')?.addEventListener('submit', function(e) {
+        document.querySelector('#formPlaylist')?.addEventListener('submit', function (e) {
             const title = document.getElementById('playlistTitle').value.trim();
             if (!title) {
                 e.preventDefault();
@@ -1556,50 +1703,62 @@
         });
 
         // make "BUAT" button also fill hidden input if user clicks button outside form (older logic)
-        document.querySelector('.btn-buat-playlist')?.addEventListener('click', function() {
+        document.querySelector('.btn-buat-playlist')?.addEventListener('click', function () {
             document.getElementById('judul_playlist').value = document.getElementById('playlistTitle').value || '';
         });
 
         // Upload area interactions: click zone triggers hidden input
-        document.getElementById('uploadArea')?.addEventListener('click', function() {
+        document.getElementById('uploadArea')?.addEventListener('click', function () {
             document.getElementById('fileInput').click();
         });
 
         // Preview image/video for selected file
-        document.getElementById('fileInput')?.addEventListener('change', function() {
+        document.getElementById('fileInput')?.addEventListener('change', function () {
             const file = this.files[0];
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const previewImg = document.getElementById('previewImage');
                 const previewVid = document.getElementById('previewVideo');
+                const textContainer = document.getElementById('uploadTextContainer');
                 const iconArea = document.getElementById('iconArea');
-                const text = document.getElementById('uploadText');
 
-                iconArea.style.display = 'none';
-                text.style.display = 'none';
+                if (iconArea) iconArea.style.display = 'none';
+                if (textContainer) textContainer.style.display = 'none';
 
                 if (file.type.startsWith('image/')) {
                     previewVid.style.display = 'none';
                     previewImg.style.display = 'block';
                     previewImg.src = e.target.result;
 
+                    // Deteksi Resolusi Gambar
+                    const tempImg = new Image();
+                    tempImg.src = e.target.result;
+                    tempImg.onload = function () {
+                        document.getElementById('resolusi').value = this.width + 'x' + this.height;
+                    };
+
                 } else if (file.type.startsWith('video/')) {
                     previewImg.style.display = 'none';
                     previewVid.style.display = 'block';
-                    previewVid.src = e.target.result;
-                    previewVid.muted = true;
-                    previewVid.autoplay = true;
-                    previewVid.play().catch(() => {});
 
+                    previewVid.src = e.target.result;
+                    previewVid.controls = true;
+
+                    // Deteksi Resolusi Video
+                    previewVid.onloadedmetadata = function () {
+                        document.getElementById('resolusi').value = this.videoWidth + 'x' + this.videoHeight;
+                    };
+
+                    previewVid.load();
                 }
             };
             reader.readAsDataURL(file);
         });
 
         // If server set show_tab in session, open that tab after DOM ready
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             @if (session('show_tab'))
                 openTab("{{ session('show_tab') }}");
             @endif
@@ -1619,7 +1778,7 @@
             target.classList.toggle('d-none');
         }
 
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const clickedInside = e.target.closest('.item-box');
 
             // Jika klik di luar item playlist
@@ -1642,7 +1801,6 @@
                     <label>Mulai</label>
                     <div class="jadwal-input">
                         <input type="date" id="tglMulai">
-                        <img src="https://cdn-icons-png.flaticon.com/512/747/747310.png" class="icon-calendar">
                     </div>
                 </div>
 
@@ -1650,7 +1808,6 @@
                     <label>Selesai</label>
                     <div class="jadwal-input">
                         <input type="date" id="tglSelesai">
-                        <img src="https://cdn-icons-png.flaticon.com/512/747/747310.png" class="icon-calendar">
                     </div>
                 </div>
             </div>
@@ -1707,8 +1864,8 @@
             <p class="hapus-text">Pilih playlist untuk konten ini:</p>
 
             {{-- <div id="playlistList" style="text-align:left; margin-bottom:20px;">
-                    <!-- daftar playlist akan dimasukkan lewat JS -->
-                </div> --}}
+                <!-- daftar playlist akan dimasukkan lewat JS -->
+            </div> --}}
 
             <div class="hapus-actions">
                 <button class="btn-hapus-cancel" onclick="closeTambahKePlaylist()">BATAL</button>
@@ -1729,8 +1886,7 @@
             <div class="modal-body">
                 <!-- Durasi -->
                 <label class="label">Durasi (detik)</label>
-                <input type="number" id="durationInput" min="1" class="input-duration"
-                    placeholder="Contoh: 10">
+                <input type="number" id="durationInput" min="1" class="input-duration" placeholder="Contoh: 10">
             </div>
 
             <div class="modal-actions">
@@ -1740,11 +1896,6 @@
 
         </div>
     </div>
-
-
-
-
-
 
     <!-- ====================== SCRIPT LOAD PLAYLIST DETAIL ====================== -->
     <script>
@@ -1776,12 +1927,14 @@
                     </thead>
                     <tbody>
                         ${items.map((item, i) => {
-                            const isVideo = item.file.match(/\.(mp4|mov|avi|mkv|webm)$/i);
-                            const preview = isVideo
-                                ? `<video src="/storage/${item.file}" controls style="width:160px"></video>`
-                                : `<img src="/storage/${item.file}" style="width:160px">`;
+                        const isVideo = item.file.match(/\.(mp4|mov|avi|mkv|webm)$/i);
+                        const orientasi = (item.orientasi || 'Landscape').toLowerCase();
+                        const portraitClass = orientasi === 'portrait' ? 'is-portrait' : '';
+                        const preview = isVideo
+                            ? `<video src="/storage/${item.file}" class="content-video ${portraitClass}"></video>`
+                            : `<img src="/storage/${item.file}" class="content-thumbnail ${portraitClass}">`;
 
-                                return `
+                        return `
         <tr id="row-${item.pc_id}">
             <td>${i + 1}</td>
             <td>${preview}</td>
@@ -1797,14 +1950,19 @@
             </td>
             <td>
                 <button type="button"
+                    class="btn-aksi text-primary me-2"
+                    onclick="playSingleItem('${item.file}', '${item.orientasi}')">
+                    Putar
+                </button>
+                <button type="button"
                     class="btn-aksi text-danger"
                     onclick="hapusKonten(${item.pc_id})">
                     Hapus
                 </button>
             </td>
         </tr>
-        `;                                              
-                            }).join('')}
+        `;
+                    }).join('')}
                     </tbody>
                 </table>
             </div>`;
@@ -1858,7 +2016,6 @@
         }
 
 
-
         let selectedPlaylistId = null;
 
         function selectPlaylist(id, el) {
@@ -1891,17 +2048,17 @@
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             fetch('/playlist-content-add', {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "X-CSRF-TOKEN": token
-                    },
-                    body: JSON.stringify({
-                        playlist_id: selectedPlaylistId,
-                        konten_id: window.selectedKontenId
-                    })
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": token
+                },
+                body: JSON.stringify({
+                    playlist_id: selectedPlaylistId,
+                    konten_id: window.selectedKontenId
                 })
+            })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
@@ -1915,7 +2072,7 @@
         }
 
         // Optional: Add keyboard support
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             const popup = document.getElementById('popupPilihPlaylist');
             if (!popup.classList.contains('d-none')) {
                 if (e.key === 'Escape') {
@@ -1937,12 +2094,12 @@
             }, 200);
         }
         // add playlist 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const btnAddPlaylist = document.querySelector('.btn-add-playlist');
             const popupPlaylist = document.getElementById('popupPlaylist');
 
             if (btnAddPlaylist && popupPlaylist) {
-                btnAddPlaylist.addEventListener('click', function() {
+                btnAddPlaylist.addEventListener('click', function () {
                     popupPlaylist.classList.remove('d-none');
                 });
             }
@@ -1959,12 +2116,12 @@
             if (!confirm('Hapus konten ini dari playlist?')) return;
 
             fetch(`/playlist-content/${pc_id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    }
-                })
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
@@ -1984,6 +2141,26 @@
                     console.error(err);
                 });
         }
+        function playSingleItem(filePath, orientasi) {
+            // Kunci agar showTab tidak memanggil loadActivePreview
+            window.skipAutoReload = true;
+
+            // Pindah ke tab preview
+            showTab('preview');
+
+            // Set data item tunggal
+            previewList = [{
+                file: filePath,
+                orientasi: orientasi || 'Landscape',
+                duration: 10
+            }];
+            previewIndex = 0;
+            playPreview();
+
+            // Lepas kunci setelah beberapa saat
+            setTimeout(() => { window.skipAutoReload = false; }, 500);
+        }
+
         let previewIndex = 0;
         let previewTimer = null;
         let previewList = [];
@@ -2011,6 +2188,9 @@
             fetch(`/admin/playlist/${ACTIVE_PLAYLIST_ID}/content`)
                 .then(res => res.json())
                 .then(data => {
+                    // 🔥 PENGAMAN: Jika sedang memutar item tunggal, abaikan reload otomatis
+                    if (window.skipAutoReload) return;
+
                     previewList = data.contents || [];
                     previewIndex = 0;
 
@@ -2027,9 +2207,13 @@
 
         function playPreview() {
             clearTimeout(previewTimer);
+            const item = previewList[previewIndex];
+            const orientasi = (item.orientasi || 'Landscape').toLowerCase();
+
+            // Set orientasi preview
+            previewPlayer.className = 'preview-player mode-' + orientasi + '-preview';
             previewPlayer.innerHTML = '';
 
-            const item = previewList[previewIndex];
             const file = `/storage/${item.file}`;
             const ext = file.split('.').pop().toLowerCase();
 
@@ -2037,7 +2221,8 @@
                 const video = document.createElement('video');
                 video.src = file;
                 video.autoplay = true;
-                video.muted = true;
+                video.muted = false;
+                video.controls = true; // 🔥 Tambahkan ini agar bisa di-pause
                 video.style.maxWidth = '100%';
                 video.style.maxHeight = '100%';
                 video.onended = nextPreview;
@@ -2058,6 +2243,7 @@
         }
 
         function nextPreview() {
+            if (previewList.length === 0) return;
             previewIndex++;
             if (previewIndex >= previewList.length) previewIndex = 0;
             playPreview();

@@ -14,7 +14,9 @@ class Content extends Model
     protected $fillable = [
         'nama_file',
         'file',
-        'jenis'
+        'jenis',
+        'resolusi',
+        'orientasi'
     ];
 
     public function playlists()

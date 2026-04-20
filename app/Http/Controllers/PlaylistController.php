@@ -182,6 +182,7 @@ class PlaylistController extends Controller
                 'c.file',
                 'c.nama_file',
                 'c.jenis',
+                'c.orientasi',
             ])
             ->orderByRaw('pc.`order` ASC')
             ->get();
@@ -197,7 +198,7 @@ class PlaylistController extends Controller
             ->join('contents as c', 'pc.content_id', '=', 'c.id')
             ->where('pc.playlist_id', $playlist->id)
             ->orderBy('pc.order', 'asc')
-            ->select('c.file', 'c.nama_file', 'pc.duration')
+            ->select('c.file', 'c.nama_file', 'c.orientasi', 'pc.duration')
             ->get();
 
         return view('welcome', compact('playlist', 'contents'));

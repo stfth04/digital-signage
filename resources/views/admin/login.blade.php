@@ -81,7 +81,8 @@
         <!-- LOGO -->
         <img src="/logo_bps.png" alt="Logo" width="80" class="me-2">
 
-        <h3>BADAN PUSAT STATISTIK</h3>
+        <h3>BADAN PUSAT STATISTIK PROV KALSEL</h3>
+        
 
         <!-- FORM TIDAK DIUBAH, HANYA TAMBAH CLASS -->
         <form action="{{ route('login.post') }}" method="POST">

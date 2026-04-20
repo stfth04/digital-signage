@@ -15,6 +15,8 @@ return new class extends Migration
                 $table->id();
                 $table->unsignedBigInteger('playlist_id');
                 $table->unsignedBigInteger('content_id');
+                $table->integer('order')->nullable();
+                $table->integer('duration')->nullable();
                 $table->timestamps();
 
                 $table->foreign('playlist_id')->references('id')->on('playlists')->onDelete('cascade');

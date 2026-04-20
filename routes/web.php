@@ -74,3 +74,5 @@ Route::put(
     '/admin/playlist-content/{id}/duration',
     [PlaylistController::class, 'updateDuration']
 );
+
+Route::post('/playlist/set-jadwal', [PlaylistController::class, 'setJadwal']);

@@ -35,8 +35,8 @@ public function store(Request $request)
     // Ambil ekstensi asli
     $extension = $file->getClientOriginalExtension();
 
-    // Nama file yang akan disimpan ke STORAGE (harus pakai ekstensi)
-    $finalName = $nama_file . '.' . $extension;
+    // Nama file yang akan disimpan ke STORAGE (pakai timestamp agar unik)
+    $finalName = $nama_file . '_' . time() . '.' . $extension;
 
     // Simpan file
     $path = $file->storeAs('uploads', $finalName, 'public');
@@ -50,6 +50,8 @@ public function store(Request $request)
         'file'       => $path,
         'nama_file'  => $nama_file, // nama yg ditampilkan
         'jenis'      => $jenis,
+        'resolusi'   => $request->resolusi,
+        'orientasi'  => $request->orientasi,
         'created_at' => now(),
         'updated_at' => now(),
     ]);
@@ -61,8 +63,10 @@ public function store(Request $request)
 {
     $item = Content::findOrFail($id);
 
-    // Hapus file fisik
-    if ($item->file && Storage::disk('public')->exists($item->file)) {
+    // Hapus file fisik hanya jika tidak ada konten lain yang menggunakan file yang sama
+    $isUsedByOthers = Content::where('file', $item->file)->where('id', '!=', $item->id)->exists();
+
+    if (!$isUsedByOthers && $item->file && Storage::disk('public')->exists($item->file)) {
         Storage::disk('public')->delete($item->file);
     }
 
