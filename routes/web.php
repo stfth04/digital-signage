@@ -19,6 +19,15 @@ Route::get('/play/{playlist}', [PlaylistController::class, 'play'])
 
 // stop playlist diputar
 Route::post('/stop-playlist', function () {
+    $lastId = session('last_playlist_id');
+
+    // Nonaktifkan playlist yang sedang diputar
+    if ($lastId) {
+        \Illuminate\Support\Facades\DB::table('playlists')
+            ->where('id', $lastId)
+            ->update(['status' => 'nonaktif', 'updated_at' => now()]);
+    }
+
     session()->forget('last_playlist_id');
     return response()->json(['success' => true]);
 });
@@ -76,4 +85,21 @@ Route::put(
 );
 
 Route::post('/playlist/set-jadwal', [PlaylistController::class, 'setJadwal']);
+
+// API untuk mendapatkan playlist aktif
+Route::get('/active-playlist', function () {
+
+    $today = now()->toDateString();
+
+    $activePlaylist = \App\Models\Playlist::where('status', 'aktif')
+        ->whereDate('tanggal_mulai', '<=', $today)
+        ->whereDate('tanggal_selesai', '>=', $today)
+        ->first();
+
+    return response()->json([
+        'playlist_id' => $activePlaylist?->id,
+        'playlist_name' => $activePlaylist?->nama_playlist
+    ]);
+
+});
 

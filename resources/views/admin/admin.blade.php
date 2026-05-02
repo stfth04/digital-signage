@@ -1101,8 +1101,7 @@
 
         .btn-cancel {
             background: #206486;
-            color: #e0e0e0
-            border: none;
+            color: #e0e0e0 border: none;
             padding: 8px 22px;
             border-radius: 20px;
             cursor: pointer;
@@ -1458,7 +1457,7 @@
                     <input type="hidden" id="judul_playlist" name="judul">
 
                     <button type="submit" class="btn-buat-playlist">BUAT</button>
-                    <button type="button" class="btn-buat-playlist"onclick="closePopupAddPlaylist()">BATAL</button>
+                    <button type="button" class="btn-buat-playlist" onclick="closePopupAddPlaylist()">BATAL</button>
                 </form>
             </div>
         </div>
@@ -1558,29 +1557,58 @@
 
 
         // OPEN
-        function openJadwal() {
-            document.getElementById("popupJadwal").classList.remove("d-none");
+        function openJadwal(playlistId) {
+            document.getElementById('jadwalPlaylistId').value = playlistId;
+            document.getElementById('tglMulai').value = '';
+            document.getElementById('tglSelesai').value = '';
+            document.getElementById('popupJadwal').classList.remove('d-none');
         }
 
         // CLOSE
         function closeJadwal() {
             document.getElementById("popupJadwal").classList.add("d-none");
+            document.getElementById('jadwalPlaylistId').value = '';
+            document.getElementById('tglMulai').value = '';
+            document.getElementById('tglSelesai').value = '';
         }
 
         // SAVE
         function saveJadwal() {
-            const mulai = document.getElementById("tglMulai").value;
-            const selesai = document.getElementById("tglSelesai").value;
+            const playlistId = document.getElementById('jadwalPlaylistId').value;
+            const tanggalMulai = document.getElementById('tglMulai').value;
+            const tanggalSelesai = document.getElementById('tglSelesai').value;
 
-            if (!mulai || !selesai) {
-                alert("Tanggal tidak boleh kosong!");
+            if (!playlistId) {
+                alert('Playlist tidak ditemukan!');
+                return;
+            }
+            if (!tanggalMulai || !tanggalSelesai) {
+                alert('Tanggal mulai dan selesai wajib diisi!');
                 return;
             }
 
-            console.log("Mulai:", mulai);
-            console.log("Selesai:", selesai);
-
-            closeJadwal();
+            fetch('/playlist/set-jadwal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    playlist_id: playlistId,
+                    tanggal_mulai: tanggalMulai,
+                    tanggal_selesai: tanggalSelesai,
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Jadwal berhasil disimpan!');
+                        closeJadwal();
+                    } else {
+                        alert('Gagal: ' + (data.message ?? 'Unknown error'));
+                    }
+                })
+                .catch(() => alert('Terjadi kesalahan koneksi.'));
         }
 
         let activePlaylistId = null;
@@ -1593,6 +1621,8 @@
 
         function closeGanti() {
             document.getElementById("popupGanti").classList.add("d-none");
+            document.getElementById("namaBaru").value = '';
+            activePlaylistId = null;
         }
 
         function saveGanti() {
@@ -1638,8 +1668,8 @@
 
         // Tutup popup hapus
         function closeHapus() {
-            deleteId = null;
             document.getElementById("popupHapus").classList.add("d-none");
+            deleteId = null;
         }
 
         // Konfirmasi hapus
@@ -1685,6 +1715,16 @@
                 document.getElementById('playlist').classList.add('d-none');
                 document.getElementById('playlistDetail').classList.remove('d-none');
             });
+
+        function formatTanggal(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
 
         // escape HTML helper
         function escapeHtml(unsafe) {
@@ -1797,34 +1837,33 @@
 
     <!-- POPUP JADWAL -->
     <div class="popup-jadwal d-none" id="popupJadwal">
-
         <div class="jadwal-box">
             <h3 class="jadwal-title">Jadwal</h3>
+
+            <!-- Tambahkan hidden input untuk playlist_id -->
+            <input type="hidden" id="jadwalPlaylistId">
 
             <div class="jadwal-row">
                 <div class="jadwal-col">
                     <label>Mulai</label>
                     <div class="jadwal-input">
-                        <input type="date" id="tglMulai">
+                        <input type="date" id="tglMulai" name="tanggal_mulai">
                     </div>
                 </div>
 
                 <div class="jadwal-col">
                     <label>Selesai</label>
                     <div class="jadwal-input">
-                        <input type="date" id="tglSelesai">
+                        <input type="date" id="tglSelesai" name="tanggal_selesai">
                     </div>
                 </div>
             </div>
-
-            <hr class="divider">
 
             <div class="jadwal-actions">
                 <button class="btn-cancel" onclick="closeJadwal()">Batal</button>
                 <button class="btn-save" onclick="saveJadwal()">Simpan</button>
             </div>
         </div>
-
     </div>
 
     <!-- POPUP HAPUS PLAYLIST -->
@@ -1842,6 +1881,7 @@
             </div>
         </div>
     </div>
+
 
     <div class="popup-hapus d-none" id="popupTambahKePlaylist">
         <div class="hapus-box">
@@ -1921,33 +1961,33 @@
                             : `<img src="/storage/${item.file}" class="content-thumbnail ${portraitClass}">`;
 
                         return `
-        <tr id="row-${item.pc_id}">
-            <td>${i + 1}</td>
-            <td>${preview}</td>
-            <td>
-                ${typeof item.duration === 'number' ? item.duration + 's' : '-'}
-                ${item.jenis === 'Gambar' ? `
-            <button class="btn-edit-duration"
-                onclick="openDurationModal(${item.pc_id}, ${item.duration ?? 5})"
-                title="Atur durasi">
-                ✎
-            </button>
-        ` : ''}
-            </td>
-            <td>
-                <button type="button"
-                    class="btn-aksi text-primary me-2"
-                    onclick="playSingleItem('${item.file}', '${item.orientasi}')">
-                    Putar
-                </button>
-                <button type="button"
-                    class="btn-aksi text-danger"
-                    onclick="hapusKonten(${item.pc_id})">
-                    Hapus
-                </button>
-            </td>
-        </tr>
-        `;
+                                <tr id="row-${item.pc_id}">
+                                    <td>${i + 1}</td>
+                                    <td>${preview}</td>
+                                    <td>
+                                        ${typeof item.duration === 'number' ? item.duration + 's' : '-'}
+                                        ${item.jenis === 'Gambar' ? `
+                                            <button class="btn-edit-duration"
+                                                onclick="openDurationModal(${item.pc_id}, ${item.duration ?? 5})"
+                                                title="Atur durasi">
+                                                ✎
+                                            </button>
+                                        ` : ''}
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                            class="btn-aksi text-primary me-2"
+                                            onclick="playSingleItem('${item.file}', '${item.orientasi}')">
+                                            Putar
+                                        </button>
+                                        <button type="button"
+                                            class="btn-aksi text-danger"
+                                            onclick="hapusKonten(${item.pc_id})">
+                                            Hapus
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
                     }).join('')}
                     </tbody>
                 </table>
@@ -1961,6 +2001,23 @@
 
                         <h2 class="playlisttitle">${escapeHtml(playlist.nama_playlist)}</h2>
 
+                        <div style="text-align:left; margin-top: 8px; margin-left: 127px; font-size: 14px; color: #555;">
+                            ${playlist.tanggal_mulai && playlist.tanggal_selesai
+                        ? `📅 <strong>${formatTanggal(playlist.tanggal_mulai)}</strong> &nbsp;—&nbsp; <strong>${formatTanggal(playlist.tanggal_selesai)}</strong>
+                                                    <span style="margin-left:10px; padding:3px 12px; border-radius:20px; font-size:12px; font-weight:600;
+                                                    background:${playlist.status === 'aktif' ? '#d4edda' : '#f8d7da'};
+                                                    color:${playlist.status === 'aktif' ? '#155724' : '#721c24'};">
+                                                    ${playlist.status === 'aktif' ? '● Aktif' : '● Nonaktif'}
+                                </span>`
+                        : `<span style="color:#aaa; font-style:italic;">Belum ada jadwal</span>
+                                                    <span style="margin-left:10px; padding:3px 12px; border-radius:20px; font-size:12px; font-weight:600;
+                                                    background:${playlist.status === 'aktif' ? '#d4edda' : '#f8d7da'};
+                                                    color:${playlist.status === 'aktif' ? '#155724' : '#721c24'};">
+                                                    ${playlist.status === 'aktif' ? '● Aktif' : '● Nonaktif'}
+                                </span>`
+                    }
+                        </div>
+
                         <!-- ICON TITIK 3 -->
                         <div class="item-box">
                             <img src="/logotitik3.png"
@@ -1969,7 +2026,7 @@
 
                             <!-- MENU YANG MUNCUL -->
                             <div class="more-menu d-none">
-                                <div class="more-item" onclick="openJadwal()">Jadwal</div>
+<div class="more-item" onclick="openJadwal(${playlist.id})">Jadwal</div>
                                 <div class="more-item"
                                     onclick="openHapus(${playlist.id}, '${escapeHtml(playlist.nama_playlist)}')">
                                     Hapus Playlist
@@ -1985,7 +2042,7 @@
 
                     <div class="playlist-detail-buttons">
                         <button class="btn-play-all"
-                             onclick="window.open('/play/${playlist.id}', '_blank')">
+                            onclick="mainkanPlaylist(${playlist.id})">
                             ► Putar Semua
                         </button>
                         <button class="btn-add-content" data-playlist-id="${playlist.id}">
@@ -2128,13 +2185,13 @@
                 });
         }
         function playSingleItem(filePath, orientasi) {
-            // Kunci agar showTab tidak memanggil loadActivePreview
+            // Set flag agar tidak auto reload preview
             window.skipAutoReload = true;
 
             // Pindah ke tab preview
             showTab('preview');
 
-            // Set data item tunggal
+            // Preview single item
             previewList = [{
                 file: filePath,
                 orientasi: orientasi || 'Landscape',
@@ -2143,8 +2200,10 @@
             previewIndex = 0;
             playPreview();
 
-            // Lepas kunci setelah beberapa saat
-            setTimeout(() => { window.skipAutoReload = false; }, 500);
+            // Reset flag setelah delay
+            setTimeout(() => {
+                window.skipAutoReload = false;
+            }, 1000);
         }
 
         let previewIndex = 0;
@@ -2159,30 +2218,37 @@
         // ambil playlist aktif dari session lewat blade
         const ACTIVE_PLAYLIST_ID = @json(session('last_playlist_id'));
 
-        function loadActivePreview() {
-            if (!previewPlayer) {
-                console.warn('previewPlayer element not found');
+        async function getActivePlaylistId() {
+            try {
+                const response = await fetch('/api/active-playlist');
+                const data = await response.json();
+                return data.playlist_id;
+            } catch (error) {
+                console.error('Gagal mengambil playlist aktif:', error);
+                return null;
+            }
+        }
+
+        async function loadActivePreview() {
+            if (!previewPlayer) return;
+
+            const playlistId = await getActivePlaylistId();
+
+            if (!playlistId) {
+                previewPlayer.innerHTML = '<span style="color:#aaa">Tidak ada playlist aktif</span>';
                 return;
             }
 
-            if (!ACTIVE_PLAYLIST_ID) {
-                previewPlayer.innerHTML =
-                    '<span style="color:#aaa">Belum ada playlist diputar</span>';
-                return;
-            }
-
-            fetch(`/admin/playlist/${ACTIVE_PLAYLIST_ID}/content`)
+            fetch(`/admin/playlist/${playlistId}/content`)
                 .then(res => res.json())
                 .then(data => {
-                    // 🔥 PENGAMAN: Jika sedang memutar item tunggal, abaikan reload otomatis
                     if (window.skipAutoReload) return;
 
                     previewList = data.contents || [];
                     previewIndex = 0;
 
                     if (!previewList.length) {
-                        previewPlayer.innerHTML =
-                            '<span style="color:#aaa">Playlist kosong</span>';
+                        previewPlayer.innerHTML = '<span style="color:#aaa">Playlist kosong</span>';
                         return;
                     }
 
@@ -2255,6 +2321,19 @@
             currentPcId = null;
         }
 
+        function mainkanPlaylist(playlistId) {
+            // Update status aktif di DB dulu via fetch
+            fetch(`/play/${playlistId}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).catch(() => { });
+
+            // Langsung buka tab player
+            window.open(`/play/${playlistId}`, '_blank');
+        }
+
         async function saveDuration() {
             const duration = document.getElementById('durationInput').value;
 
@@ -2283,6 +2362,76 @@
             } catch {
                 alert('Gagal menyimpan durasi');
             }
+        }
+
+        // Tambahkan event delegation untuk tombol "Tambah Konten +"
+        document.addEventListener('click', function (e) {
+            // Cek apakah yang diklik adalah tombol "Tambah Konten +" atau di dalamnya
+            const addBtn = e.target.closest('.btn-add-content');
+            if (addBtn) {
+                const playlistId = addBtn.getAttribute('data-playlist-id');
+                if (playlistId) {
+                    // Simpan playlist ID untuk digunakan nanti
+                    window.selectedPlaylistForAdd = playlistId;
+                    openPopupPlaylistForAdd();
+                }
+            }
+        });
+
+        // Fungsi khusus untuk open popup playlist dari halaman detail
+        function openPopupPlaylistForAdd() {
+            // Reset selected playlist
+            selectedPlaylistId = null;
+
+            // Hapus highlight sebelumnya
+            document.querySelectorAll('#popupPilihPlaylist .playlist-card')
+                .forEach(card => card.classList.remove('selected-playlist'));
+
+            // Tampilkan popup
+            document.getElementById('popupPilihPlaylist').classList.remove('d-none');
+        }
+
+        // Modify submitAddToPlaylist untuk mendukung kedua skenario
+        function submitAddToPlaylist() {
+            // Cek apakah berasal dari halaman detail playlist atau dari kelola konten
+            const playlistId = selectedPlaylistId;
+            const kontenId = window.selectedKontenId || window.kontenIdFromDetail;
+
+            if (!playlistId || !kontenId) {
+                alert("Silakan pilih playlist dan konten terlebih dahulu!");
+                return;
+            }
+
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            fetch('/playlist-content-add', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": token
+                },
+                body: JSON.stringify({
+                    playlist_id: playlistId,
+                    konten_id: kontenId
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Konten berhasil ditambahkan ke playlist!');
+                        closePopupPlaylist();
+                        // Refresh detail playlist jika sedang aktif
+                        if (activePlaylistId) {
+                            loadPlaylistDetail(activePlaylistId);
+                        }
+                    } else {
+                        alert(data.error || 'Gagal menambahkan konten');
+                    }
+                })
+                .catch(err => {
+                    alert('Terjadi kesalahan: ' + err.message);
+                });
         }
     </script>
     <!-- ====================== END SCRIPT ====================== -->

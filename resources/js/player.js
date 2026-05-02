@@ -28,14 +28,11 @@ function playNext() {
         return;
     }
 
-    // 🔥 ATUR ORIENTASI PLAYER
-    const orientasi = (item.orientasi || 'Landscape').toLowerCase();
-    console.log(`Memainkan konten: ${item.nama_file} [Orientasi: ${orientasi}]`);
-    document.body.className = 'mode-' + orientasi;
+    const orientasi = (item.orientasi || "Landscape").toLowerCase();
+    document.body.className = "mode-" + orientasi;
 
     const file = `/storage/${item.file}`;
-    const clean = file.split("?")[0];
-    const ext = clean.split(".").pop().toLowerCase();
+    const ext = file.split("?")[0].split(".").pop().toLowerCase();
 
     /* ===== VIDEO ===== */
     if (VIDEO_EXT.includes(ext)) {
@@ -44,16 +41,9 @@ function playNext() {
         video.muted = false;
         video.playsInline = true;
         video.preload = "auto";
-
         video.onended = next;
         video.onerror = next;
-
-        video.oncanplay = () => {
-            video.play().catch(() => {
-                // autoplay diblok browser → diabaikan
-            });
-        };
-
+        video.oncanplay = () => video.play().catch(() => {});
         player.appendChild(video);
         return;
     }
@@ -62,23 +52,15 @@ function playNext() {
     if (IMAGE_EXT.includes(ext)) {
         const img = document.createElement("img");
         img.src = file;
-
         img.onload = () => {
-            // 🔥 DEFAULT 10 DETIK JIKA duration = 0 / null
-            const imageDuration =
-                item.duration && item.duration > 0 ? item.duration : 10;
-
-            timer = setTimeout(next, imageDuration * 1000);
+            const dur = item.duration && item.duration > 0 ? item.duration : 10;
+            timer = setTimeout(next, dur * 1000);
         };
-
         img.onerror = next;
-
         player.appendChild(img);
         return;
     }
 
-    /* ===== FORMAT TIDAK DIDUKUNG ===== */
-    console.warn("Format tidak didukung:", file);
     next();
 }
 
@@ -98,7 +80,6 @@ if (btnStop) {
     btnStop.addEventListener("click", async () => {
         stopped = true;
         started = false;
-
         clearTimeout(timer);
         timer = null;
         player.innerHTML = "";
@@ -107,7 +88,6 @@ if (btnStop) {
             document.exitFullscreen().catch(() => {});
         }
 
-        // 🔥 hapus session playlist terakhir
         try {
             await fetch("/stop-playlist", {
                 method: "POST",
@@ -119,7 +99,6 @@ if (btnStop) {
             });
         } catch (e) {}
 
-        // kembali ke root
         window.location.href = "/admin";
     });
 }
@@ -134,14 +113,10 @@ document.addEventListener(
             started = true;
             playNext();
         }
-
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(() => {});
-        }
+        document.documentElement.requestFullscreen?.().catch(() => {});
     },
-    { once: true }
+    { once: true },
 );
-
 
 const el = document.querySelector("video, img");
 

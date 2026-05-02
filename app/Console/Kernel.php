@@ -10,9 +10,23 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
-    protected function schedule(Schedule $schedule): void
+    protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Update status playlist setiap jam berdasarkan jadwal
+        $schedule->call(function () {
+            $today = \Carbon\Carbon::today();
+
+            // Aktifkan playlist yang jadwalnya mulai hari ini
+            \App\Models\Playlist::where('status', 'nonaktif')
+                ->where('tanggal_mulai', '<=', $today)
+                ->where('tanggal_selesai', '>=', $today)
+                ->update(['status' => 'aktif']);
+
+            // Nonaktifkan playlist yang jadwalnya sudah berakhir
+            \App\Models\Playlist::where('status', 'aktif')
+                ->where('tanggal_selesai', '<', $today)
+                ->update(['status' => 'nonaktif']);
+        })->hourly();
     }
 
     /**
@@ -20,7 +34,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

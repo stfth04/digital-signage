@@ -36,11 +36,16 @@ class PlaylistController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required'
+            'judul' => 'required',
+            'tanggal_mulai' => 'nullable|date',
+            'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
         ]);
 
         Playlist::create([
-            'nama_playlist' => $request->judul
+            'nama_playlist' => $request->judul,
+            'tanggal_mulai' => $request->tanggal_mulai,
+            'tanggal_selesai' => $request->tanggal_selesai,
+            'status' => 'nonaktif', // scheduler yang akan aktifkan otomatis
         ]);
 
         return back()
@@ -206,28 +211,42 @@ class PlaylistController extends Controller
 
     public function play($playlistId)
     {
-        // simpan playlist terakhir yang diputar
+        $playlist = Playlist::findOrFail($playlistId);
+
+        // Aktifkan status saat diputar — selalu aktif saat user klik putar
+        DB::table('playlists')
+            ->where('id', $playlistId)
+            ->update([
+                'status' => 'aktif',
+                'updated_at' => now()
+            ]);
+
         session(['last_playlist_id' => $playlistId]);
 
-        return $this->renderPlaylist(
-            Playlist::findOrFail($playlistId)
-        );
+        return $this->renderPlaylist($playlist);
     }
 
-    
+
 
     public function root()
     {
-        $lastPlaylistId = session('last_playlist_id');
+        // Cek playlist yang sedang aktif berdasarkan jadwal
+        $today = now()->toDateString();
 
-        if ($lastPlaylistId) {
-            return redirect()->route('playlist.play', $lastPlaylistId);
+        $activePlaylist = Playlist::where('status', 'aktif')
+            ->whereDate('tanggal_mulai', '<=', $today)
+            ->whereDate('tanggal_selesai', '>=', $today)
+            ->first();
+
+        if ($activePlaylist) {
+            // Simpan ke session untuk performa (opsional)
+            session(['last_playlist_id' => $activePlaylist->id]);
+            return redirect()->route('playlist.play', $activePlaylist->id);
         }
 
-        // JANGAN redirect ke playlist apa pun
-        return view('welcome'); // atau halaman idle / kosong
+        // Tidak ada playlist aktif, tampilkan halaman kosong
+        return view('welcome');
     }
-
 
 
     // HAPUS KONTEN DARI PLAYLIST (PIVOT)
@@ -270,6 +289,46 @@ class PlaylistController extends Controller
             ->update(['duration' => $request->duration]);
 
         return response()->json(['success' => true]);
+    }
+
+    // PlaylistController.php
+
+    public function setJadwal(Request $request)
+    {
+        $request->validate([
+            'playlist_id' => 'required|integer|exists:playlists,id',
+            'tanggal_mulai' => 'required|date',
+            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+        ]);
+
+        $today = now()->toDateString();
+        $mulai = \Carbon\Carbon::parse($request->tanggal_mulai);
+        $selesai = \Carbon\Carbon::parse($request->tanggal_selesai);
+
+        // Tentukan status berdasarkan jadwal
+        $status = (
+            $mulai->toDateString() <= $today &&
+            $selesai->toDateString() >= $today
+        ) ? 'aktif' : 'nonaktif';
+
+        DB::table('playlists')
+            ->where('id', $request->playlist_id)
+            ->update([
+                'tanggal_mulai' => $request->tanggal_mulai,
+                'tanggal_selesai' => $request->tanggal_selesai,
+                'status' => $status,
+                'updated_at' => now(),
+            ]);
+
+        // Jika playlist ini menjadi aktif, update session
+        if ($status === 'aktif') {
+            session(['last_playlist_id' => $request->playlist_id]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Jadwal berhasil disimpan!'
+        ]);
     }
 
 
