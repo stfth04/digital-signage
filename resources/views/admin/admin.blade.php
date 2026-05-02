@@ -173,7 +173,7 @@
         }
 
         .playlist-card {
-            width: 150px;
+            width: 200px;
             background: #ffffff;
             border-radius: 10px;
             padding: 10px;
@@ -202,7 +202,7 @@
         .playlisttitle {
             font-size: 24px;
             font-weight: 600;
-            margin-top: -34px;
+            margin-top: -40px;
             margin-left: 127px;
         }
 
@@ -212,7 +212,7 @@
             margin-bottom: 30px;
             margin: 5px 0 5px 0;
             margin-left: 850px;
-            margin-top: -40px
+            margin-top: -50px
         }
 
         .btn-play-all,
@@ -388,7 +388,7 @@
 
         .icon-more {
             position: absolute;
-            top: -68px;
+            top: -48px;
             /* 👉 naikkan ke atas */
             right: 10px;
             width: 35px;
@@ -627,7 +627,7 @@
         .btn-cancel {
             width: 50%;
             padding: 9px 0;
-            background: #d9d9d9;
+            background: #206486;
             border: none;
             border-radius: 18px;
             font-weight: 600;
@@ -882,6 +882,10 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
+            word-break: break-word;
         }
 
         .playlist-card:hover .playlist-title {
@@ -1096,7 +1100,8 @@
         }
 
         .btn-cancel {
-            background: #dcdcdc;
+            background: #206486;
+            color: #e0e0e0
             border: none;
             padding: 8px 22px;
             border-radius: 20px;
@@ -1345,7 +1350,7 @@
                     <tbody>
                         @foreach ($konten as $item)
                             <tr>
-                                <td class="fw-bold text-secondary">#{{ $loop->iteration }}</td>
+                                <td class="fw-bold text-secondary">{{ $loop->iteration }}</td>
                                 <td class="text-start">
                                     <div class="d-flex align-items-center gap-3">
                                         @php
@@ -1453,7 +1458,7 @@
                     <input type="hidden" id="judul_playlist" name="judul">
 
                     <button type="submit" class="btn-buat-playlist">BUAT</button>
-                    <button type="button" onclick="closePopupAddPlaylist()">BATAL</button>
+                    <button type="button" class="btn-buat-playlist"onclick="closePopupAddPlaylist()">BATAL</button>
                 </form>
             </div>
         </div>
@@ -1817,25 +1822,6 @@
             <div class="jadwal-actions">
                 <button class="btn-cancel" onclick="closeJadwal()">Batal</button>
                 <button class="btn-save" onclick="saveJadwal()">Simpan</button>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- POPUP GANTI NAMA -->
-    <div class="popup-ganti d-none" id="popupGanti">
-
-        <div class="ganti-box">
-            <h3 class="ganti-title">Ganti Nama</h3>
-
-            <div class="ganti-input-wrap">
-                <label>Nama Baru</label>
-                <input type="text" id="namaBaru" class="ganti-input" placeholder="Masukkan nama baru">
-            </div>
-
-            <div class="ganti-actions">
-                <button class="btn-cancel" onclick="closeGanti()">Batal</button>
-                <button class="btn-save" onclick="saveGanti()">Simpan</button>
             </div>
         </div>
 

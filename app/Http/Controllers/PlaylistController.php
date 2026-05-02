@@ -214,6 +214,8 @@ class PlaylistController extends Controller
         );
     }
 
+    
+
     public function root()
     {
         $lastPlaylistId = session('last_playlist_id');
