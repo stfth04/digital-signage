@@ -17,6 +17,8 @@ Route::get('/', [PlaylistController::class, 'root']);
 Route::get('/play/{playlist}', [PlaylistController::class, 'play'])
     ->name('playlist.play');
 
+Route::get('/playjadwal', [PlaylistController::class, 'playplaylist']);
+
 // stop playlist diputar
 Route::post('/stop-playlist', function () {
     $lastId = session('last_playlist_id');
@@ -59,6 +61,7 @@ Route::get('/playlist', [PlaylistController::class, 'index'])->name('playlist.in
 
 // Buat playlist baru
 Route::post('/playlist/store', [PlaylistController::class, 'store'])->name('playlist.store');
+
 
 // API: ambil detail playlist (dipanggil oleh JS loadPlaylistDetail)
 Route::get('/playlist/{id}', [PlaylistController::class, 'show'])->name('playlist.show');

@@ -21,7 +21,7 @@
 
         .login-container {
             background: white;
-            width: 450px;
+            width: 250px;
             padding: 40px 30px;
             border-radius: 8px;
             box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
@@ -57,7 +57,7 @@
         }
 
         .btn-login {
-            width: 100%;
+            width: 55%;
             padding: 15px;
             border-radius: 25px;
             border: none;
@@ -79,7 +79,7 @@
     <div class="login-container">
 
         <!-- LOGO -->
-        <img src="/logo_bps.png" alt="Logo" width="80" class="me-2">
+        <img src="/logo_bps.png" alt="Logo" width="70" class="me-2">
 
         <h3>BADAN PUSAT STATISTIK PROV KALSEL</h3>
         

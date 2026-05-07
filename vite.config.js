@@ -9,6 +9,8 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/css/player.css',
                 'resources/js/player.js',
+                'resources/css/admin.css', 
+                'resources/js/admin.js',
             ],
             refresh: true,
         })

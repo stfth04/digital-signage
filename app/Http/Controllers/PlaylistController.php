@@ -197,8 +197,11 @@ class PlaylistController extends Controller
             'contents' => $konten
         ]);
     }
-    private function renderPlaylist($playlist)
-    {
+    private function renderPlaylist($playlists)
+{
+    $allContents = collect();
+
+    foreach ($playlists as $playlist) {
         $contents = DB::table('playlist_content as pc')
             ->join('contents as c', 'pc.content_id', '=', 'c.id')
             ->where('pc.playlist_id', $playlist->id)
@@ -206,8 +209,15 @@ class PlaylistController extends Controller
             ->select('c.file', 'c.nama_file', 'c.orientasi', 'pc.duration')
             ->get();
 
-        return view('welcome', compact('playlist', 'contents'));
+        // gabungkan semua isi
+        $allContents = $allContents->merge($contents);
     }
+
+    return view('welcome', [
+        'playlists' => $playlists,
+        'contents' => $allContents
+    ]);
+}
 
     public function play($playlistId)
     {
@@ -226,6 +236,15 @@ class PlaylistController extends Controller
         return $this->renderPlaylist($playlist);
     }
 
+    public function playplaylist()
+    {
+        $playlistx = new Playlist();    
+
+        $playlist = $playlistx->scopeAktifHariIni()->get();
+        
+
+        return $this->renderPlaylist($playlist);
+    }
 
 
     public function root()
@@ -333,3 +352,4 @@ class PlaylistController extends Controller
 
 
 }
+

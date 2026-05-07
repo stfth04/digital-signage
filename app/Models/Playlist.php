@@ -38,10 +38,10 @@ class Playlist extends Model
     }
 
     // Scope: hanya playlist yang sedang aktif hari ini
-    public function scopeAktifHariIni($query)
+    public function scopeAktifHariIni()
     {
         $today = Carbon::today();
-        return $query->where('status', 'aktif')
+        return $this->where('status', 'aktif')
                      ->where('tanggal_mulai', '<=', $today)
                      ->where('tanggal_selesai', '>=', $today);
     }
